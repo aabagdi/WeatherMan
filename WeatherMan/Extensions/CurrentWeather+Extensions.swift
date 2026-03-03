@@ -11,6 +11,7 @@ import WeatherKit
 extension CurrentWeather {
   func convert(to unit: TempUnit) -> Double {
     let measurement = Measurement(value: temperature.value, unit: temperature.unit)
-    return measurement.converted(to: unit.unitTemperature).value.rounded()
+    let rounded = measurement.converted(to: unit.unitTemperature).value.rounded()
+    return rounded == 0 ? 0 : rounded
   }
 }
