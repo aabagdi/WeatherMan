@@ -68,7 +68,12 @@ class AddCityViewController: UIViewController {
 
 extension AddCityViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    searchCompleter.queryFragment = searchText
+    if searchText.isEmpty {
+      completions.removeAll()
+      tableView.reloadData()
+    } else {
+      searchCompleter.queryFragment = searchText
+    }
   }
   
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -108,6 +113,10 @@ extension AddCityViewController: UITableViewDataSource, UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     let completion = completions[indexPath.row]
     let city = completion.title
+    guard !PersistenceManager.retrieveSavedCities().contains(city) else {
+      presentWMAlert(for: .duplicateCity)
+      return
+    }
     PersistenceManager.addCityToSaved(city: city)
     dismiss(animated: true) { [weak self] in
       self?.onDismiss?()

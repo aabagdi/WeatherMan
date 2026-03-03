@@ -11,12 +11,14 @@ enum WMError: LocalizedError {
   case mapSearchError
   case weatherFetchError
   case locationError
+  case duplicateCity
   
   var errorDescription: String? {
     switch self {
     case .mapSearchError: "Unable to find location. Please try again."
     case .weatherFetchError: "Unable to fetch weather data. Please try again later."
     case .locationError: "Unable to determine your current location."
+    case .duplicateCity: "This city has already been added."
     }
   }
 }

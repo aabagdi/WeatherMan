@@ -32,6 +32,7 @@ enum PersistenceManager {
   
   static func addCityToSaved(city: String) {
     var cities = retrieveSavedCities()
+    guard !cities.contains(city) else { return }
     cities.append(city)
     storeSavedCities(cities: cities)
   }
