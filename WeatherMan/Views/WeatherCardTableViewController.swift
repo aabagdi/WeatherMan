@@ -7,6 +7,7 @@
 
 import UIKit
 import WeatherKit
+import CoreLocation
 
 class WeatherCardTableViewController: UITableViewController {
   
@@ -68,6 +69,21 @@ class WeatherCardTableViewController: UITableViewController {
     
   private func loadWeatherData() {
     savedCities = PersistenceManager.retrieveSavedCities()
+    
+    locationManager.onAuthorizationChanged = { [weak self] status in
+      switch status {
+      case .authorizedWhenInUse, .authorizedAlways:
+        self?.fetchCurrentLocationWeather()
+      case .denied, .restricted:
+        self?.currentLocationWeather = nil
+        self?.currentCity = nil
+        self?.tableView.reloadSections(IndexSet(integer: Section.currentLocation.rawValue), with: .automatic)
+        self?.presentWMAlert(title: "WeatherMan can't use location services", message: "Check location services permissions in settings")
+      default:
+        break
+      }
+    }
+    
     fetchCurrentLocationWeather()
     fetchSavedCityWeathers()
   }

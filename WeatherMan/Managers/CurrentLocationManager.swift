@@ -12,6 +12,7 @@ import MapKit
 class CurrentLocationManager: NSObject, CLLocationManagerDelegate {
   private var locationManager: CLLocationManager?
   private var authorizationContinuation: CheckedContinuation<Void, Never>?
+  var onAuthorizationChanged: ((CLAuthorizationStatus) -> Void)?
   
   func getCurrentCity() async throws -> String? {
     locationManager = CLLocationManager()
@@ -43,6 +44,10 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate {
     if manager.authorizationStatus != .notDetermined {
       authorizationContinuation?.resume()
       authorizationContinuation = nil
+    }
+    
+    if authorizationContinuation == nil {
+      onAuthorizationChanged?(manager.authorizationStatus)
     }
   }
 }
