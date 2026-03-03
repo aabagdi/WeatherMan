@@ -24,6 +24,13 @@ enum WMError: LocalizedError {
 enum TempUnit {
   case celsius
   case fahrenheit
+  
+  var unitTemperature: UnitTemperature {
+    switch self {
+    case .celsius: .celsius
+    case .fahrenheit: .fahrenheit
+    }
+  }
 }
 
 enum LocationSource {

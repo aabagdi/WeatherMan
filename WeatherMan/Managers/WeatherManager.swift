@@ -26,7 +26,7 @@ enum WeatherManager {
     return currentWeather
   }
   
-  private static func getTemp(for currentWeather: CurrentWeather?) -> Double {
+  private static func getTemp(for currentWeather: CurrentWeather?) -> Double {  
     let temperature = currentWeather?.temperature.value ?? 0.0
     
     return temperature
@@ -47,14 +47,11 @@ enum WeatherManager {
   }
   
   static func convertTempUnitsAndConvertToReadable(tempUnit: TempUnit, currentWeather: CurrentWeather?) -> String {
-    let celsiusTemp = getTemp(for: currentWeather)
-    
     switch tempUnit {
     case .celsius:
-      return String(Int(celsiusTemp.rounded()))
+      return String(format: "%.0f", currentWeather?.convert(to: .celsius) ?? 0.0)
     case .fahrenheit:
-      let fahrenheitTemp = ((celsiusTemp * 9 / 5) + 32).rounded()
-      return String(Int(fahrenheitTemp))
+      return String(format: "%.0f", currentWeather?.convert(to: .fahrenheit) ?? 0.0)
     }
   }
 }
