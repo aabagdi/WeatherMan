@@ -114,7 +114,7 @@ extension AddCityViewController: UITableViewDataSource, UITableViewDelegate {
     let completion = completions[indexPath.row]
     let city = completion.title
     guard !PersistenceManager.retrieveSavedCities().contains(city) else {
-      presentWMAlert(for: .duplicateCity)
+      presentWMAlert(for: .duplicateLocation)
       return
     }
     PersistenceManager.addCityToSaved(city: city)
