@@ -47,7 +47,6 @@ class WeatherCardViewController: UIViewController {
     super.viewDidAppear(animated)
   }
   
-  @MainActor
   private func configureWeatherCardView(currentCity: String) async {
     let currentWeather = try? await WeatherManager.getWeather(for: currentCity)
     weatherCard.currentWeather = currentWeather
