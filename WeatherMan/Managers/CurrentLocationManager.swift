@@ -10,22 +10,23 @@ import CoreLocation
 import MapKit
 
 class CurrentLocationManager: NSObject, CLLocationManagerDelegate {
-  private var locationManager: CLLocationManager?
+  private let locationManager = CLLocationManager()
   private var authorizationContinuation: CheckedContinuation<Void, Never>?
+  private var lastKnownStatus: CLAuthorizationStatus?
   var onAuthorizationChanged: ((CLAuthorizationStatus) -> Void)?
   
+  override init() {
+    super.init()
+    locationManager.delegate = self
+  }
+  
   func getCurrentCity() async throws -> String? {
-    locationManager = CLLocationManager()
-    locationManager?.delegate = self
-    
-    if locationManager?.authorizationStatus == .notDetermined {
+    if locationManager.authorizationStatus == .notDetermined {
       await withCheckedContinuation { continuation in
         authorizationContinuation = continuation
-        locationManager?.requestWhenInUseAuthorization()
+        locationManager.requestWhenInUseAuthorization()
       }
     }
-    
-    guard let locationManager else { return nil }
     
     switch locationManager.authorizationStatus {
     case .authorizedAlways, .authorizedWhenInUse:
@@ -41,13 +42,16 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate {
   }
   
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-    if manager.authorizationStatus != .notDetermined {
+    let status = manager.authorizationStatus
+    
+    if status != .notDetermined {
       authorizationContinuation?.resume()
       authorizationContinuation = nil
     }
     
-    if authorizationContinuation == nil {
-      onAuthorizationChanged?(manager.authorizationStatus)
-    }
+    defer { lastKnownStatus = status }
+    
+    guard let lastKnownStatus, status != lastKnownStatus else { return }
+    onAuthorizationChanged?(status)
   }
 }

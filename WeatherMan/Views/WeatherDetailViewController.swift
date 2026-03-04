@@ -149,6 +149,11 @@ class WeatherDetailViewController: UIViewController {
     let card = UIView()
     card.backgroundColor = .secondarySystemBackground
     card.layer.cornerRadius = 12
+    card.layer.shadowColor = UIColor.black.cgColor
+    card.layer.shadowRadius = 4
+    card.layer.shadowOpacity = 0.12
+    card.layer.shadowOffset = CGSize(width: 0, height: 10)
+    card.clipsToBounds = false
     
     let stack = UIStackView()
     stack.axis = .vertical
@@ -270,7 +275,11 @@ class WeatherDetailViewController: UIViewController {
     let container = UIView()
     container.backgroundColor = .secondarySystemBackground
     container.layer.cornerRadius = 12
-    container.clipsToBounds = true
+    container.layer.shadowColor = UIColor.black.cgColor
+    container.layer.shadowRadius = 4
+    container.layer.shadowOpacity = 0.12
+    container.layer.shadowOffset = CGSize(width: 0, height: 10)
+    container.clipsToBounds = false
     
     let rowsStack = UIStackView()
     rowsStack.axis = .vertical
