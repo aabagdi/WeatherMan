@@ -19,13 +19,6 @@ class WeatherCardView: UIView {
   var currentCity: String?
   var tempUnit: TempUnit = .fahrenheit
   
-  init(currentWeather: CurrentWeather?, currentCity: String?) {
-    self.currentWeather = currentWeather
-    self.currentCity = currentCity
-    super.init(frame: .zero)
-    setup()
-  }
-  
   override init(frame: CGRect) {
     super.init(frame: frame)
     setup()
